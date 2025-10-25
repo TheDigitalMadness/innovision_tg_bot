@@ -1,0 +1,43 @@
+services:
+  bot:
+    build: .
+    container_name: bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+    command: ["python", "bot.py"]
+
+  mongo:
+    image: mongo:6
+    container_name: aiogram_mongo
+    restart: always
+    # ports:
+    #   - "12922:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    expose:
+      - "5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app
+
+
+volumes:
+  pgdata:
+  mongo_data:
+
+networks:
+  app:
+    driver: bridge
