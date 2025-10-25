@@ -10,6 +10,8 @@ services:
     volumes:
       - .:/app
     command: ["python", "bot.py"]
+    networks:
+      - innovision
 
   mongo:
     image: mongo:6
@@ -19,6 +21,8 @@ services:
     #   - "12922:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - innovision
 
   postgres:
     image: postgres:17-alpine
@@ -31,7 +35,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - app
+      - innovision
 
 
 volumes:
@@ -39,5 +43,5 @@ volumes:
   mongo_data:
 
 networks:
-  app:
+  innovision:
     driver: bridge
